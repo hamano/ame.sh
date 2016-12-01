@@ -1,7 +1,7 @@
-# $BEl5~(B ame.sh
+# 東京 ame.sh
 
 [ame1.gif](images/ame1.gif)
 
-## --play$B%*%W%7%g%s(B
+## --playオプション
 
 [ame2.gif](images/ame2.gif)
