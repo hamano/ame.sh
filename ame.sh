@@ -35,13 +35,13 @@ function ame_print() {
 
 function ame_last() {
     LAST=`curl -s http://tokyo-ame.jwa.or.jp/scripts/mesh_index.js \
-           |sed -e 's/[^0-9,]//g' -e 's/,/\n/g'|head -1`
+           |sed -e 's/[^0-9,]//g' |tr -s ',' '\n' |head -1`
     ame_print "${LAST}"
 }
 
 function ame_play() {
     INDEX=`curl -s http://tokyo-ame.jwa.or.jp/scripts/mesh_index.js \
-         |sed -e 's/[^0-9,]//g' -e 's/,/\n/g'|tac`
+         |sed -e 's/[^0-9,]//g' |tr -s ',' '\n' |tac`
     declare -a TIMES=()
     for t in $INDEX; do
         TIMES+=( ${t} )
