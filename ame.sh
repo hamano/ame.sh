@@ -3,7 +3,7 @@
 
 function ame_init() {
     deps=(curl convert)
-    for d in $deps; do
+    for d in "${deps[@]}"; do
         if ! type $d > /dev/null 2>&1; then
             echo "$d not found"
             exit 1
