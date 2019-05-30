@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # ame.sh
+#set -x
 
 function ame_init() {
     deps=(curl convert)
@@ -12,11 +13,11 @@ function ame_init() {
     if [ ! -d ~/.ame ]; then
         mkdir -p ~/.ame
     fi
-    if [ ! -f ~/.ame/map000.pnm ]; then
-        convert http://tokyo-ame.jwa.or.jp/map/map000.jpg ~/.ame/map000.pnm
+    if [ ! -f ~/.ame/map000.jpg ]; then
+        curl -s -o ~/.ame/map000.jpg https://tokyo-ame.jwa.or.jp/map/map000.jpg
     fi
     if [ ! -f ~/.ame/msk000.png ]; then
-        curl -s -o ~/.ame/msk000.png http://tokyo-ame.jwa.or.jp/map/msk000.png
+        curl -s -o ~/.ame/msk000.png https://tokyo-ame.jwa.or.jp/map/msk000.png
     fi
 }
 
@@ -24,23 +25,27 @@ function ame_print() {
     SIZE="640x"
     TIME=$1
     LABEL=${TIME:8:2}:${TIME:10}
-    URI=http://tokyo-ame.jwa.or.jp/mesh/000/${TIME}.gif
-    convert -compose over ~/.ame/map000.pnm \
-            $URI \
-            -composite ~/.ame/msk000.png \
+    URI=https://tokyo-ame.jwa.or.jp/mesh/000/${TIME}.gif
+    curl -s -o ~/.ame/tmp.gif "$URI"
+    convert ~/.ame/map000.jpg \
+            ~/.ame/msk000.png \
+	        -compose over \
+            -composite \
+            ~/.ame/tmp.gif \
+            -composite \
             -undercolor white -stroke gray -pointsize 26 -gravity south -annotate 0 " ${LABEL} " \
             -resize ${SIZE} \
-            -composite sixel:-
+            sixel:-
 }
 
 function ame_last() {
-    LAST=`curl -s http://tokyo-ame.jwa.or.jp/scripts/mesh_index.js \
+    LAST=`curl -s https://tokyo-ame.jwa.or.jp/scripts/mesh_index.js \
            |sed -e 's/[^0-9,]//g' |tr -s ',' '\n' |head -1`
     ame_print "${LAST}"
 }
 
 function ame_play() {
-    INDEX=`curl -s http://tokyo-ame.jwa.or.jp/scripts/mesh_index.js \
+    INDEX=`curl -s https://tokyo-ame.jwa.or.jp/scripts/mesh_index.js \
          |sed -e 's/[^0-9,]//g' |tr -s ',' '\n' |tac`
     declare -a TIMES=()
     for t in $INDEX; do
