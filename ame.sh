@@ -2,6 +2,8 @@
 # ame.sh
 #set -x
 
+WIDTH=`xwininfo -id $WINDOWID | grep Width: | sed -e "s/\s*Width:\s*\(.*\)/\1/"`
+
 function ame_init() {
     deps=(curl convert)
     for d in "${deps[@]}"; do
@@ -22,7 +24,7 @@ function ame_init() {
 }
 
 function ame_print() {
-    SIZE="640x"
+    SIZE="${WIDTH}x"
     TIME=$1
     LABEL=${TIME:8:2}:${TIME:10}
     URI=https://tokyo-ame.jwa.or.jp/mesh/000/${TIME}.gif
