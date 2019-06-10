@@ -30,10 +30,10 @@ function ame_print() {
     URI=https://tokyo-ame.jwa.or.jp/mesh/000/${TIME}.gif
     curl -s -o ~/.ame/tmp.gif "$URI"
     convert ~/.ame/map000.jpg \
-            ~/.ame/msk000.png \
+            ~/.ame/tmp.gif \
 	        -compose over \
             -composite \
-            ~/.ame/tmp.gif \
+            ~/.ame/msk000.png \
             -composite \
             -undercolor white -stroke gray -pointsize 26 -gravity south -annotate 0 " ${LABEL} " \
             -resize ${SIZE} \
